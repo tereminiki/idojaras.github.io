@@ -1,43 +1,119 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+fetch("https://api.open-meteo.com/v1/forecast?latitude=47.53&longitude=21.62&hourly=temperature_2m")
+.then(x => x.json())
+.then(y => Megjelenit(y));
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.plot.ly/plotly-2.20.0.min.js" charset="utf-8"></script>
-</head>
-<body>
-       <div id="myDiv">
-
-       </div>     
-       <div id="maxDiv">
-
-       </div> 
-       <div id="minDiv">
-
-       </div>
-       <div id="oszlop2Div">
-
-       </div>       
-    
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>Firstname</th>
-              <th>Lastname</th>
-            </tr>
-          </thead>
-          <tbody id="tablazat">
-
-          </tbody>
-        </table>
+function Megjelenit(y){
+    console.log(y)
+    console.log(y.hourly.time.length)
+    //          <tr>
+    //           <td>John</td>
+    //           <td>Doe</td>
+    //          </tr>
+    var sz = ""
+    for (let i = 0; i < y.hourly.time.length; i++) {
+        //console.log(i)
+        sz+=`
+        <tr>
+        <td>${y.hourly.time[i]}</td>
+        <td>${y.hourly.temperature_2m[i]} C°</td>
+        </tr>
+        `
+        
+    }
+    document.getElementById("tablazat").innerHTML = sz
+//diagram--------------------------------------------------------
+    var data = [
+        {
+          x: y.hourly.time,
+          y: y.hourly.temperature_2m,
+          type: 'bar'
+        }
+      ];
       
+      Plotly.newPlot('myDiv', data);
 
 
-    <script src="js.js"></script>
-</body>
-</html>
+      //Maximum diagram------------------------
+       var maxtombi=[]
+       var maxtombh=[]
+      for (let i = 13; i < y.hourly.time.length; i += 24) {
+        maxtombi.push(y.hourly.time[i])
+        maxtombh.push(y.hourly.temperature_2m[i])
+      }
+
+      var ujmaxtombi = maxtombi.map((elem) =>{
+        //console.log("bármi"+elem)
+        var kecske = elem.split('T')
+        return kecske[0]
+      })
+
+      var maxdata = [
+        {
+          x: ujmaxtombi,
+          y: maxtombh,
+          type: 'bar'
+        }
+      ];
+      Plotly.newPlot('maxDiv', maxdata);
+
+      //mindiagram---------------------------
+      var mintombi=[]
+      var mintombh=[]
+     for (let i = 4; i < y.hourly.time.length; i += 24) {
+       mintombi.push(y.hourly.time[i])
+       mintombh.push(y.hourly.temperature_2m[i])
+     }
+
+     var ujmintombi = mintombi.map((elem) =>{
+       //console.log("bármi"+elem)
+       var kecske = elem.split('T')
+       return kecske[0]
+     })
+
+     var mindata = [
+       {
+         x: ujmintombi,
+         y: mintombh,
+         type: 'bar'
+       }
+     ];
+     Plotly.newPlot('minDiv', mindata);
+
+ // 2 oszlopos diagram-----------------------------------------------------------------     
+ var trace1 = {
+
+    x: mintombi,
+  
+    y: mintombh,
+  
+    name: 'Minimum hőmérsékletek',
+  
+    type: 'bar'
+  
+  };
+  
+  
+  var trace2 = {
+  
+    x: maxtombi,
+  
+    y: maxtombh,
+  
+    name: 'Maximum hőmérsékletek',
+  
+    type: 'bar',
+    marker:{color:'green'}
+  
+  };
+  
+  
+  var data = [trace1, trace2];
+  
+  
+  var layout = {barmode: 'group'};
+  
+  
+  Plotly.newPlot('oszlop2Div', data, layout);
+
+
+}
