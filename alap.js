@@ -1,76 +1,43 @@
-let szavak=["alma","banán","kiskutya"]
-let kitalalando=""
-let hibakszama=0
-let kiirbetuk=0
-let benyomottbettomb=[]
-function elindul(){
-    //alert("Elindult!")
-    document.getElementById("hibakep").innerHTML=""
-    kitalalando=""
-    hibakszama=0
-    kiirbetuk=0
-    benyomottbettomb=[]
-    document.getElementById("betukkeret").innerHTML=""
-    let veletlen=Math.floor(Math.random() * szavak.length);
-    //alert(veletlen)
-    kitalalando=szavak[veletlen]
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.20.0.min.js" charset="utf-8"></script>
+</head>
+<body>
+       <div id="myDiv">
+
+       </div>     
+       <div id="maxDiv">
+
+       </div> 
+       <div id="minDiv">
+
+       </div>
+       <div id="oszlop2Div">
+
+       </div>       
     
-    for (let i = 0; i < kitalalando.length; i++) {
-        document.getElementById("betukkeret").innerHTML+=`<div id=${i}
-        class="betuformazas">
-        </div>`
-        
-    }
-    
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Firstname</th>
+              <th>Lastname</th>
+            </tr>
+          </thead>
+          <tbody id="tablazat">
 
-    gomb.style.visibility="hidden"
+          </tbody>
+        </table>
+      
 
 
-}
-function beker(event){
-    //alert(event.key)
-    let leutottbetu=event.key
-    let db=0
-    
-
-    if(benyomottbettomb.includes(leutottbetu)==false){
-    for (let i = 0; i < kitalalando.length; i++) {
-        //alert(i)
-        
-        if(leutottbetu==kitalalando[i])
-        {
-            document.getElementById(i).innerHTML=leutottbetu
-            db++
-            benyomottbettomb.push(leutottbetu)
-            kiirbetuk++
-            if(kiirbetuk==kitalalando.length)
-            {
-                hibakep.innerHTML=`<img src="gyoztunk.jpg">`
-                gomb.style.visibility="visible"
-            }
-        }
-        
-        
-    }
-    console.log(benyomottbettomb)
-    if(db==0)
-    {
-
-        hibakszama++;
-        if(hibakszama>8){
-            hibakep.innerHTML=`<img src="vesztettel.jpg">`
-            gomb.style.visibility="visible"
-            for (let i = 0; i < kitalalando.length; i++) {
-                document.getElementById(i).innerHTML=kitalalando[i]
-                
-            }
-        }
-        else{
-        hibakep.innerHTML=`<img src="${hibakszama}.jpg">`
-        }
-    }
-}
-    console.log("Hibák száma:"+hibakszama)
-    
-
-}
+    <script src="js.js"></script>
+</body>
+</html>
